@@ -245,60 +245,42 @@ st.markdown("""
         user-select: none !important;
         box-sizing: border-box !important;
     }
-    /* Hide the radio input span wrapper */
-    div[data-testid="stRadio"] div[role="radiogroup"] label > span {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
+    /* Completely hide ONLY the native radio input and the radio circle */
+    div[data-testid="stRadio"] div[role="radiogroup"] input[type="radio"] {
         position: absolute !important;
-        pointer-events: none !important;
-    }
-    /* Expand label inner container to center the text */
-    div[data-testid="stRadio"] div[role="radiogroup"] label > div {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-    /* Hide the circular radio indicator completely */
-    div[data-testid="stRadio"] div[role="radiogroup"] label > div > div:first-child:not(:has(p)) {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
         opacity: 0 !important;
-        position: absolute !important;
+        width: 0 !important;
+        height: 0 !important;
         pointer-events: none !important;
-        border: none !important;
+        display: none !important;
     }
-    div[data-testid="stRadio"] div[role="radiogroup"] label > div > div:last-child {
+    /* The first div inside label is the BaseWeb circle dot */
+    div[data-testid="stRadio"] div[role="radiogroup"] label > div:first-of-type {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        opacity: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    /* The second div inside label contains the text */
+    div[data-testid="stRadio"] div[role="radiogroup"] label > div:last-of-type,
+    div[data-testid="stRadio"] div[role="radiogroup"] label > div:last-of-type * {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
-    }
-    div[data-testid="stRadio"] div[role="radiogroup"] label p {
-        font-size: 0.82rem !important;
+        font-size: 0.85rem !important;
         font-weight: 600 !important;
-        color: var(--muted-text) !important;
-        margin: 0 !important;
-        padding: 0 !important;
+        color: inherit !important;
         white-space: nowrap !important;
         text-align: center !important;
         letter-spacing: -0.01em !important;
-        transition: color 0.18s ease !important;
     }
     div[data-testid="stRadio"] div[role="radiogroup"] label:hover:not(:has(input:checked)) {
         background-color: var(--card-bg) !important;
-    }
-    div[data-testid="stRadio"] div[role="radiogroup"] label:hover:not(:has(input:checked)) p {
         color: var(--text-color) !important;
     }
     div[data-testid="stRadio"] div[role="radiogroup"] label:has(input:checked),
@@ -306,9 +288,10 @@ st.markdown("""
         background-color: var(--primary-color) !important;
         border-color: var(--primary-color) !important;
         box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35) !important;
+        color: #ffffff !important;
     }
-    div[data-testid="stRadio"] div[role="radiogroup"] label:has(input:checked) p,
-    div[data-testid="stRadio"] div[role="radiogroup"] label:has([aria-checked="true"]) p {
+    div[data-testid="stRadio"] div[role="radiogroup"] label:has(input:checked) *,
+    div[data-testid="stRadio"] div[role="radiogroup"] label:has([aria-checked="true"]) * {
         color: #ffffff !important;
         font-weight: 700 !important;
     }
