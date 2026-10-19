@@ -34,100 +34,52 @@ st.set_page_config(
 )
 
 # ==============================================================================
-# Theme Synchronizer (Zero-latency Dynamic Streamlit Theme Hook)
-# Detects Streamlit's active theme (Light / Dark / Custom) and toggles
-# data-theme="dark" or data-theme="light" on root document so all CSS variables
-# and custom cards update automatically when users toggle the Streamlit theme.
+# Theme State Initialization & Dynamic Resolution
 # ==============================================================================
-components.html("""
-<script>
-    (function() {
-        const parentDoc = window.parent.document;
-        function syncTheme() {
-            try {
-                const stApp = parentDoc.querySelector('.stApp') || parentDoc.querySelector('[data-testid="stApp"]');
-                if (!stApp) return;
-                const cs = window.parent.getComputedStyle(stApp);
-                const bg = cs.backgroundColor;
-                const match = bg.match(/\\d+/g);
-                if (match && match.length >= 3) {
-                    const r = parseInt(match[0]);
-                    const g = parseInt(match[1]);
-                    const b = parseInt(match[2]);
-                    const lum = (0.299 * r + 0.587 * g + 0.114 * b);
-                    const currentTheme = lum < 128 ? 'dark' : 'light';
-                    if (parentDoc.documentElement.getAttribute('data-theme') !== currentTheme) {
-                        parentDoc.documentElement.setAttribute('data-theme', currentTheme);
-                    }
-                }
-            } catch (e) {}
-        }
-        syncTheme();
-        setInterval(syncTheme, 300);
-    })();
-</script>
-""", height=0, width=0)
+if "theme_mode" not in st.session_state or st.session_state["theme_mode"] not in ["Light ☀️", "Dark 🌙"]:
+    st.session_state["theme_mode"] = "Light ☀️"
 
-# ==============================================================================
-# Dynamic Multi-Theme System (Custom / Light / Dark)
-# Uses Streamlit CSS Variables:
-#   var(--background-color)
-#   var(--secondary-background-color)
-#   var(--text-color)
-#   var(--primary-color)
-# ==============================================================================
-st.markdown("""
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+current_theme = st.session_state["theme_mode"]
 
-    /* =========================================================================
-       Theme Token Definitions
-       ========================================================================= */
-    :root,
-    [data-theme="light"] {
-        --background-color: #ffffff;
-        --secondary-background-color: #f8fafc;
-        --text-color: #0f172a;
-        --primary-color: #2563eb;
-        --card-bg: #ffffff;
-        --card-border: #e2e8f0;
-        --muted-text: #475569;
-        --pill-bg: #eff6ff;
-        --pill-border: #bfdbfe;
-        --shadow-color: rgba(0, 0, 0, 0.04);
-    }
-
-    :root[data-theme="dark"],
-    [data-theme="dark"],
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --background-color: #0e1117;
-            --secondary-background-color: #1a1f2c;
-            --text-color: #f8fafc;
-            --primary-color: #3b82f6;
-            --card-bg: #1e2433;
-            --card-border: #334155;
-            --muted-text: #94a3b8;
-            --pill-bg: rgba(59, 130, 246, 0.15);
-            --pill-border: rgba(59, 130, 246, 0.35);
-            --shadow-color: rgba(0, 0, 0, 0.3);
-        }
-    }
-
-    [data-theme="dark"] {
+# Generate theme-specific CSS variables & Plotly color palettes
+if current_theme == "Dark 🌙":
+    active_theme_css = """
+    :root, [data-theme="dark"], [data-theme="light"], html, body, .stApp, [data-testid="stAppViewContainer"], .main {
         --background-color: #0e1117 !important;
-        --secondary-background-color: #1a1f2c !important;
+        --secondary-background-color: #161b26 !important;
         --text-color: #f8fafc !important;
         --primary-color: #3b82f6 !important;
         --card-bg: #1e2433 !important;
         --card-border: #334155 !important;
         --muted-text: #94a3b8 !important;
-        --pill-bg: rgba(59, 130, 246, 0.15) !important;
+        --pill-bg: rgba(59, 130, 246, 0.16) !important;
         --pill-border: rgba(59, 130, 246, 0.35) !important;
-        --shadow-color: rgba(0, 0, 0, 0.3) !important;
+        --shadow-color: rgba(0, 0, 0, 0.45) !important;
+        color-scheme: dark !important;
+        background-color: #161b26 !important;
+        color: #f8fafc !important;
     }
-
-    [data-theme="light"] {
+    .stApp, [data-testid="stAppViewContainer"], .main {
+        background-color: #161b26 !important;
+        color: #f8fafc !important;
+    }
+    header[data-testid="stHeader"] {
+        background-color: #0e1117 !important;
+        border-bottom: 1px solid #334155 !important;
+    }
+    section[data-testid="stSidebar"] {
+        background-color: #0e1117 !important;
+        border-right: 1px solid #334155 !important;
+    }
+    """
+    plotly_font_color = "#f8fafc"
+    plotly_grid_color = "rgba(255, 255, 255, 0.1)"
+    plotly_template = "plotly_dark"
+    plotly_streamlit_theme = None
+    js_theme_attr = "dark"
+elif current_theme == "Light ☀️":
+    active_theme_css = """
+    :root, [data-theme="dark"], [data-theme="light"], html, body, .stApp, [data-testid="stAppViewContainer"], .main {
         --background-color: #ffffff !important;
         --secondary-background-color: #f8fafc !important;
         --text-color: #0f172a !important;
@@ -138,6 +90,176 @@ st.markdown("""
         --pill-bg: #eff6ff !important;
         --pill-border: #bfdbfe !important;
         --shadow-color: rgba(0, 0, 0, 0.04) !important;
+        color-scheme: light !important;
+        background-color: #f8fafc !important;
+        color: #0f172a !important;
+    }
+    .stApp, [data-testid="stAppViewContainer"], .main {
+        background-color: #f8fafc !important;
+        color: #0f172a !important;
+    }
+    header[data-testid="stHeader"] {
+        background-color: #ffffff !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+    }
+    section[data-testid="stSidebar"] {
+        background-color: #ffffff !important;
+        border-right: 1px solid #e2e8f0 !important;
+    }
+    """
+    plotly_font_color = "#0f172a"
+    plotly_grid_color = "rgba(0, 0, 0, 0.06)"
+    plotly_template = "plotly_white"
+    plotly_streamlit_theme = "streamlit"
+    js_theme_attr = "light"
+else:  # System ⚙️
+    active_theme_css = """
+    :root {
+        --background-color: #ffffff;
+        --secondary-background-color: #f8fafc;
+        --text-color: #0f172a;
+        --primary-color: #2563eb;
+        --card-bg: #ffffff;
+        --card-border: #e2e8f0;
+        --muted-text: #475569;
+        --pill-bg: #eff6ff;
+        --pill-border: #bfdbfe;
+        --shadow-color: rgba(0, 0, 0, 0.04);
+        color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+        :root, html, body, .stApp, [data-testid="stAppViewContainer"], .main {
+            --background-color: #0e1117 !important;
+            --secondary-background-color: #161b26 !important;
+            --text-color: #f8fafc !important;
+            --primary-color: #3b82f6 !important;
+            --card-bg: #1e2433 !important;
+            --card-border: #334155 !important;
+            --muted-text: #94a3b8 !important;
+            --pill-bg: rgba(59, 130, 246, 0.16) !important;
+            --pill-border: rgba(59, 130, 246, 0.35) !important;
+            --shadow-color: rgba(0, 0, 0, 0.45) !important;
+            color-scheme: dark !important;
+            background-color: #161b26 !important;
+            color: #f8fafc !important;
+        }
+        .stApp, [data-testid="stAppViewContainer"], .main {
+            background-color: #161b26 !important;
+            color: #f8fafc !important;
+        }
+        header[data-testid="stHeader"] {
+            background-color: #0e1117 !important;
+            border-bottom: 1px solid #334155 !important;
+        }
+        section[data-testid="stSidebar"] {
+            background-color: #0e1117 !important;
+            border-right: 1px solid #334155 !important;
+        }
+    }
+    """
+    plotly_font_color = "#0f172a"
+    plotly_grid_color = "rgba(0, 0, 0, 0.06)"
+    plotly_template = "plotly_white"
+    plotly_streamlit_theme = "streamlit"
+    js_theme_attr = "system"
+
+# Synchronize parent document attribute
+components.html(f"""
+<script>
+    (function() {{
+        const parentDoc = window.parent.document;
+        const mode = "{js_theme_attr}";
+        function applyDocTheme() {{
+            try {{
+                let targetTheme = mode;
+                if (mode === "system") {{
+                    targetTheme = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+                }}
+                if (parentDoc.documentElement.getAttribute('data-theme') !== targetTheme) {{
+                    parentDoc.documentElement.setAttribute('data-theme', targetTheme);
+                }}
+            }} catch (e) {{}}
+        }}
+        applyDocTheme();
+        setInterval(applyDocTheme, 400);
+    }})();
+</script>
+""", height=0, width=0)
+
+# Dynamic Active Theme Tokens
+st.markdown(f"<style>{active_theme_css}</style>", unsafe_allow_html=True)
+
+# ==============================================================================
+# Master Responsive Styling & Appearance Controller
+# ==============================================================================
+st.markdown("""
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+    /* =========================================================================
+       Appearance Mode Segmented Control (Sidebar: Light & Dark)
+       ========================================================================= */
+    div[data-testid="stRadio"] {
+        margin: 0 0 1rem 0 !important;
+        width: 100% !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 4px !important;
+        background-color: var(--secondary-background-color) !important;
+        padding: 4px !important;
+        border-radius: 10px !important;
+        border: 1px solid var(--card-border) !important;
+        box-shadow: inset 0 1px 2px var(--shadow-color) !important;
+        width: 100% !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] label[data-baseweb="radio"] {
+        flex: 1 1 0 !important;
+        margin: 0 !important;
+        padding: 7px 10px !important;
+        border-radius: 7px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        background: transparent !important;
+        border: 1px solid transparent !important;
+        position: relative !important;
+    }
+    /* Hide the radio dot safely */
+    div[data-testid="stRadio"] div[role="radiogroup"] label[data-baseweb="radio"] > div:first-child {
+        opacity: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
+        margin: 0 !important;
+        position: absolute !important;
+        pointer-events: none !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] label[data-baseweb="radio"] [data-testid="stMarkdownContainer"] p {
+        font-size: 0.82rem !important;
+        font-weight: 600 !important;
+        color: var(--muted-text) !important;
+        margin: 0 !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+        letter-spacing: -0.01em !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] label[data-baseweb="radio"]:hover:not(:has(input:checked)) {
+        background-color: var(--card-bg) !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] label[data-baseweb="radio"]:hover:not(:has(input:checked)) [data-testid="stMarkdownContainer"] p {
+        color: var(--text-color) !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] label[data-baseweb="radio"]:has(input:checked) {
+        background-color: var(--primary-color) !important;
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35) !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] label[data-baseweb="radio"]:has(input:checked) [data-testid="stMarkdownContainer"] p {
+        color: #ffffff !important;
+        font-weight: 700 !important;
     }
 
     /* Top Navbar/Header Clean & Fully Visible (No Square Borders) */
@@ -567,6 +689,7 @@ st.markdown("""
         max-width: 620px;
         margin: 0.4rem auto 0.8rem auto;
         line-height: 1.5;
+        text-align: center;
     }
     .math-pill-row {
         display: flex;
@@ -847,10 +970,12 @@ st.markdown("""
             font-size: 0.9rem !important;
             margin: 0.3rem auto 0.65rem auto !important;
             line-height: 1.45 !important;
+            text-align: center !important;
         }
 
         .math-pill-row {
             gap: 0.4rem !important;
+            justify-content: center !important;
         }
 
         .math-pill {
@@ -997,10 +1122,11 @@ st.markdown("""
 
 # Cohesive Dynamic Plotly Theme (Transparent Canvas, Adapts to Light & Dark)
 PLOTLY_THEME = dict(
+    template=plotly_template,
     paper_bgcolor='rgba(0,0,0,0)',
     plot_bgcolor='rgba(0,0,0,0)',
-    font=dict(family='Inter, sans-serif', size=12),
-    title=dict(font=dict(size=14, family='Space Grotesk, sans-serif')),
+    font=dict(family='Inter, sans-serif', size=12, color=plotly_font_color),
+    title=dict(font=dict(size=14, family='Space Grotesk, sans-serif', color=plotly_font_color)),
     margin=dict(l=35, r=20, t=45, b=40)
 )
 MATH_PALETTE = ["#2563eb", "#0284c7", "#0d9488", "#7c3aed", "#d97706", "#dc2626"]
@@ -1035,12 +1161,24 @@ st.markdown(f"""
 with st.sidebar:
     sidebar_logo_img = f'<img src="data:image/svg+xml;base64,{b64_svg}" style="width: 38px; height: 38px; border-radius: 8px; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.22);" alt="Logo" />' if b64_svg else '📊'
     sidebar_brand = f"""
-    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.2rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--card-border);">
+    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.9rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--card-border);">
         {sidebar_logo_img}
         <span style="font-size: 1.35rem; font-weight: 700; color: var(--text-color); letter-spacing: -0.02em; font-family: 'Space Grotesk', sans-serif;">Stat<span style="color: var(--primary-color);">Vision</span></span>
     </div>
     """
     st.markdown(sidebar_brand, unsafe_allow_html=True)
+    
+    # In-App Appearance Mode Switcher (Sidebar: Light & Dark)
+    st.markdown("<p style='font-size: 0.76rem; font-weight: 700; color: var(--muted-text); margin: 0 0 0.35rem 0; text-transform: uppercase; letter-spacing: 0.08em;'>Appearance Mode</p>", unsafe_allow_html=True)
+    theme_choice = st.radio(
+        "Appearance Mode",
+        options=["Light ☀️", "Dark 🌙"],
+        index=0 if current_theme == "Light ☀️" else 1,
+        horizontal=True,
+        label_visibility="collapsed",
+        key="theme_mode"
+    )
+    st.markdown("<div style='margin-bottom: 0.85rem;'></div>", unsafe_allow_html=True)
     
     st.markdown("### Controls")
     chart_height = st.slider("Chart Height (px)", min_value=320, max_value=600, value=380, step=20)
@@ -1284,7 +1422,7 @@ if num_cols:
                 fig_hist.add_vline(x=median_val, line_dash="dot", line_color="#059669",
                                    annotation_text=f"Median Q₂: {median_val:.2f}", annotation_position="top right",
                                    annotation_font=dict(color="#059669", size=11, family="Fira Code, monospace"))
-                st.plotly_chart(fig_hist, use_container_width=True, theme="streamlit")
+                st.plotly_chart(fig_hist, use_container_width=True, theme=plotly_streamlit_theme)
             
             with right_col:
                 fig_box = px.box(
@@ -1294,7 +1432,7 @@ if num_cols:
                 )
                 fig_box.update_layout(**PLOTLY_THEME, height=chart_height)
                 fig_box.update_yaxes(title_text=col)
-                st.plotly_chart(fig_box, use_container_width=True, theme="streamlit")
+                st.plotly_chart(fig_box, use_container_width=True, theme=plotly_streamlit_theme)
 
 # ==============================================================================
 # § 5: Correlation Matrix & Collinearity Topology
@@ -1324,7 +1462,7 @@ if len(num_cols) >= 2:
     fig_corr.update_xaxes(tickfont=dict(family="Fira Code, monospace", size=12))
     fig_corr.update_yaxes(tickfont=dict(family="Fira Code, monospace", size=12))
     fig_corr.update_coloraxes(colorbar_tickfont=dict(family="Fira Code, monospace", size=11))
-    st.plotly_chart(fig_corr, use_container_width=True, theme="streamlit")
+    st.plotly_chart(fig_corr, use_container_width=True, theme=plotly_streamlit_theme)
 
 # ==============================================================================
 # § 6: Bivariate Geometry & Linear Regression
@@ -1382,7 +1520,7 @@ if len(num_cols) >= 2:
     fig_scatter.update_layout(**PLOTLY_THEME, height=chart_height)
     fig_scatter.update_xaxes(title_text=x_col)
     fig_scatter.update_yaxes(title_text=y_col)
-    st.plotly_chart(fig_scatter, use_container_width=True, theme="streamlit")
+    st.plotly_chart(fig_scatter, use_container_width=True, theme=plotly_streamlit_theme)
     
     if trend_info:
         st.markdown(f'<div class="formula-callout"><b>Linear Fit:</b> <code>{trend_info}</code></div>', unsafe_allow_html=True)
@@ -1429,7 +1567,7 @@ if cat_cols and num_cols:
     fig_bar.update_xaxes(title_text=group_col)
     fig_bar.update_yaxes(title_text=val_col)
     fig_bar.update_coloraxes(colorbar_tickfont=dict(family="Fira Code, monospace", size=11))
-    st.plotly_chart(fig_bar, use_container_width=True, theme="streamlit")
+    st.plotly_chart(fig_bar, use_container_width=True, theme=plotly_streamlit_theme)
 
 # ==============================================================================
 # § 8: Export Quantitative Metrics
