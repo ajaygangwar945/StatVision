@@ -197,10 +197,21 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
 
     /* =========================================================================
-       Appearance Mode Segmented Control (Sidebar: Light & Dark)
+       Appearance Mode Segmented Control (Sidebar: Full Width Light & Dark)
        ========================================================================= */
+    div.stElementContainer:has(div[data-testid="stRadio"]),
+    div[data-testid="stRadio"],
+    div[data-testid="stRadio"] > div,
+    div[data-testid="stRadio"] div[role="radiogroup"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
     div[data-testid="stRadio"] {
         margin: 0 0 1rem 0 !important;
+    }
+    div[data-testid="stRadio"] > div {
+        display: flex !important;
         width: 100% !important;
     }
     div[data-testid="stRadio"] div[role="radiogroup"] {
@@ -208,26 +219,31 @@ st.markdown("""
         flex-direction: row !important;
         gap: 6px !important;
         background-color: var(--secondary-background-color) !important;
-        padding: 4px !important;
+        padding: 5px !important;
         border-radius: 10px !important;
         border: 1px solid var(--card-border) !important;
         box-shadow: inset 0 1px 2px var(--shadow-color) !important;
         width: 100% !important;
+        box-sizing: border-box !important;
     }
     div[data-testid="stRadio"] div[role="radiogroup"] label {
-        flex: 1 1 0 !important;
+        flex: 1 1 0% !important;
+        width: 50% !important;
+        min-width: 0 !important;
         margin: 0 !important;
-        padding: 7px 10px !important;
-        border-radius: 7px !important;
+        padding: 8px 12px !important;
+        border-radius: 8px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        text-align: center !important;
         cursor: pointer !important;
         transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1) !important;
         background: transparent !important;
         border: 1px solid transparent !important;
         position: relative !important;
         user-select: none !important;
+        box-sizing: border-box !important;
     }
     /* Hide the radio input span wrapper */
     div[data-testid="stRadio"] div[role="radiogroup"] label > span {
