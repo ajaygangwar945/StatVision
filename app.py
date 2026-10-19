@@ -56,20 +56,28 @@ if current_theme == "Dark 🌙":
         --pill-border: rgba(59, 130, 246, 0.35) !important;
         --shadow-color: rgba(0, 0, 0, 0.45) !important;
         color-scheme: dark !important;
-        background-color: #161b26 !important;
+        background-color: #0e1117 !important;
         color: #f8fafc !important;
     }
     .stApp, [data-testid="stAppViewContainer"], .main {
-        background-color: #161b26 !important;
+        background-color: #0e1117 !important;
         color: #f8fafc !important;
     }
     header[data-testid="stHeader"] {
         background-color: #0e1117 !important;
         border-bottom: 1px solid #334155 !important;
     }
-    section[data-testid="stSidebar"] {
-        background-color: #0e1117 !important;
+    section[data-testid="stSidebar"],
+    section[data-testid="stSidebar"] > div {
+        background-color: #161b26 !important;
         border-right: 1px solid #334155 !important;
+    }
+    [data-baseweb="select"] > div,
+    [data-baseweb="input"] > div,
+    div[data-baseweb="base-input"] {
+        background-color: #1e2433 !important;
+        border-color: #334155 !important;
+        color: #f8fafc !important;
     }
     """
     plotly_font_color = "#f8fafc"
@@ -91,20 +99,28 @@ elif current_theme == "Light ☀️":
         --pill-border: #bfdbfe !important;
         --shadow-color: rgba(0, 0, 0, 0.04) !important;
         color-scheme: light !important;
-        background-color: #f8fafc !important;
+        background-color: #ffffff !important;
         color: #0f172a !important;
     }
     .stApp, [data-testid="stAppViewContainer"], .main {
-        background-color: #f8fafc !important;
+        background-color: #ffffff !important;
         color: #0f172a !important;
     }
     header[data-testid="stHeader"] {
         background-color: #ffffff !important;
         border-bottom: 1px solid #e2e8f0 !important;
     }
-    section[data-testid="stSidebar"] {
-        background-color: #ffffff !important;
+    section[data-testid="stSidebar"],
+    section[data-testid="stSidebar"] > div {
+        background-color: #f8fafc !important;
         border-right: 1px solid #e2e8f0 !important;
+    }
+    [data-baseweb="select"] > div,
+    [data-baseweb="input"] > div,
+    div[data-baseweb="base-input"] {
+        background-color: #ffffff !important;
+        border-color: #e2e8f0 !important;
+        color: #0f172a !important;
     }
     """
     plotly_font_color = "#0f172a"
@@ -217,9 +233,12 @@ st.markdown("""
     div[data-testid="stRadio"] div[role="radiogroup"] {
         display: flex !important;
         flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: space-between !important;
         gap: 6px !important;
         background-color: var(--secondary-background-color) !important;
-        padding: 5px !important;
+        padding: 4px !important;
         border-radius: 10px !important;
         border: 1px solid var(--card-border) !important;
         box-shadow: inset 0 1px 2px var(--shadow-color) !important;
@@ -228,24 +247,24 @@ st.markdown("""
     }
     div[data-testid="stRadio"] div[role="radiogroup"] label {
         flex: 1 1 0% !important;
-        width: 50% !important;
+        width: calc(50% - 3px) !important;
         min-width: 0 !important;
         margin: 0 !important;
-        padding: 8px 12px !important;
-        border-radius: 8px !important;
+        padding: 6px 4px !important;
+        border-radius: 7px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         text-align: center !important;
         cursor: pointer !important;
-        transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
         background: transparent !important;
         border: 1px solid transparent !important;
         position: relative !important;
         user-select: none !important;
         box-sizing: border-box !important;
     }
-    /* Completely hide ONLY the native radio input and the radio circle */
+    /* Completely hide ONLY the native radio input and circular dot indicator */
     div[data-testid="stRadio"] div[role="radiogroup"] input[type="radio"],
     div[data-testid="stRadio"] div[role="radiogroup"] label > span {
         position: absolute !important;
@@ -255,34 +274,26 @@ st.markdown("""
         pointer-events: none !important;
         display: none !important;
     }
-    /* Expand label inner container to center the text */
-    div[data-testid="stRadio"] div[role="radiogroup"] label > div {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-    /* Hide the circular radio indicator completely if present without hiding text */
-    div[data-testid="stRadio"] div[role="radiogroup"] label > div > div:first-child:not(:has(p)) {
+    div[data-testid="stRadio"] div[role="radiogroup"] label > div:first-child {
         display: none !important;
         width: 0 !important;
         height: 0 !important;
         margin: 0 !important;
         padding: 0 !important;
-        opacity: 0 !important;
         position: absolute !important;
+        opacity: 0 !important;
         pointer-events: none !important;
-        border: none !important;
+        overflow: hidden !important;
     }
-    div[data-testid="stRadio"] div[role="radiogroup"] label > div > div:last-child {
+    /* The label text container is the last-child div - center it perfectly */
+    div[data-testid="stRadio"] div[role="radiogroup"] label > div:last-child {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
+        text-align: center !important;
     }
     div[data-testid="stRadio"] div[role="radiogroup"] label p {
         font-size: 0.85rem !important;
@@ -294,6 +305,7 @@ st.markdown("""
         text-align: center !important;
         letter-spacing: -0.01em !important;
         transition: color 0.18s ease !important;
+        width: 100% !important;
     }
     div[data-testid="stRadio"] div[role="radiogroup"] label:hover:not(:has(input:checked)) {
         background-color: var(--card-bg) !important;
@@ -1226,7 +1238,6 @@ with st.sidebar:
     theme_choice = st.radio(
         "Appearance Mode",
         options=["Light ☀️", "Dark 🌙"],
-        index=0 if current_theme == "Light ☀️" else 1,
         horizontal=True,
         label_visibility="collapsed",
         key="theme_mode"
