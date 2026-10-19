@@ -214,8 +214,7 @@ st.markdown("""
         box-shadow: inset 0 1px 2px var(--shadow-color) !important;
         width: 100% !important;
     }
-    div[data-testid="stRadio"] div[role="radiogroup"] > label,
-    div[data-testid="stRadio"] div[role="radiogroup"] label[data-baseweb="radio"] {
+    div[data-testid="stRadio"] div[role="radiogroup"] label {
         flex: 1 1 0 !important;
         margin: 0 !important;
         padding: 7px 10px !important;
@@ -230,46 +229,70 @@ st.markdown("""
         position: relative !important;
         user-select: none !important;
     }
-    /* Hide the radio dot and wrapper elements safely */
-    div[data-testid="stRadio"] div[role="radiogroup"] > label > span,
-    div[data-testid="stRadio"] div[role="radiogroup"] > label > div:first-of-type,
-    div[data-testid="stRadio"] div[role="radiogroup"] label[data-baseweb="radio"] > div:first-child {
-        opacity: 0 !important;
+    /* Hide the radio input span wrapper */
+    div[data-testid="stRadio"] div[role="radiogroup"] label > span {
+        display: none !important;
         width: 0 !important;
         height: 0 !important;
         margin: 0 !important;
+        padding: 0 !important;
         position: absolute !important;
         pointer-events: none !important;
-        display: none !important;
     }
-    div[data-testid="stRadio"] div[role="radiogroup"] > label p,
-    div[data-testid="stRadio"] div[role="radiogroup"] > label [data-testid="stMarkdownContainer"] p,
-    div[data-testid="stRadio"] div[role="radiogroup"] label[data-baseweb="radio"] [data-testid="stMarkdownContainer"] p {
+    /* Expand label inner container to center the text */
+    div[data-testid="stRadio"] div[role="radiogroup"] label > div {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    /* Hide the circular radio indicator completely */
+    div[data-testid="stRadio"] div[role="radiogroup"] label > div > div:first-child:not(:has(p)) {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        pointer-events: none !important;
+        border: none !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] label > div > div:last-child {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] label p {
         font-size: 0.82rem !important;
         font-weight: 600 !important;
         color: var(--muted-text) !important;
         margin: 0 !important;
+        padding: 0 !important;
         white-space: nowrap !important;
         text-align: center !important;
         letter-spacing: -0.01em !important;
+        transition: color 0.18s ease !important;
     }
-    div[data-testid="stRadio"] div[role="radiogroup"] > label:hover:not(:has(input:checked)),
-    div[data-testid="stRadio"] div[role="radiogroup"] label[data-baseweb="radio"]:hover:not(:has(input:checked)) {
+    div[data-testid="stRadio"] div[role="radiogroup"] label:hover:not(:has(input:checked)) {
         background-color: var(--card-bg) !important;
     }
-    div[data-testid="stRadio"] div[role="radiogroup"] > label:hover:not(:has(input:checked)) p,
-    div[data-testid="stRadio"] div[role="radiogroup"] label[data-baseweb="radio"]:hover:not(:has(input:checked)) [data-testid="stMarkdownContainer"] p {
+    div[data-testid="stRadio"] div[role="radiogroup"] label:hover:not(:has(input:checked)) p {
         color: var(--text-color) !important;
     }
-    div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input:checked),
-    div[data-testid="stRadio"] div[role="radiogroup"] label[data-baseweb="radio"]:has(input:checked) {
+    div[data-testid="stRadio"] div[role="radiogroup"] label:has(input:checked),
+    div[data-testid="stRadio"] div[role="radiogroup"] label:has([aria-checked="true"]) {
         background-color: var(--primary-color) !important;
         border-color: var(--primary-color) !important;
         box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35) !important;
     }
-    div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input:checked) p,
-    div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input:checked) [data-testid="stMarkdownContainer"] p,
-    div[data-testid="stRadio"] div[role="radiogroup"] label[data-baseweb="radio"]:has(input:checked) [data-testid="stMarkdownContainer"] p {
+    div[data-testid="stRadio"] div[role="radiogroup"] label:has(input:checked) p,
+    div[data-testid="stRadio"] div[role="radiogroup"] label:has([aria-checked="true"]) p {
         color: #ffffff !important;
         font-weight: 700 !important;
     }
