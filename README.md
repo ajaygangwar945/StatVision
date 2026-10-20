@@ -48,6 +48,56 @@ Instead of writing repetitive Python scripts or Jupyter notebooks to inspect sum
 
 ---
 
+## 🚀 Live Website
+
+The project is fully deployed and accessible online.  
+
+[![Live](https://img.shields.io/badge/Live-Visit%20Site-brightgreen?style=for-the-badge)](https://statvision-taak.onrender.com)
+
+---
+
+## 🔄 Project Workflow Diagram
+
+```mermaid
+flowchart TD
+    subgraph Ingestion ["1. Data Ingestion"]
+        A[User Uploads CSV / TSV / TXT] --> C[Data Ingestion Controller]
+        B[Select Benchmark Dataset<br>Iris / Hospitality] --> C
+    end
+
+    subgraph Backend ["2. Flask Compute Engine (app.py)"]
+        C --> D[Input Sanitization & Validation<br>secure_filename + XSS Escaping]
+        D --> E[Pandas & NumPy Matrix Processor]
+        E --> F[Moments & Quantiles<br>Mean μ, Std Dev σ, SE, Min, Q1, Q2, Q3, Max]
+        E --> G[Diagnostics Engine<br>Skewness γ1, Missing Value Map]
+        E --> H[Correlation Engine<br>Pearson r Matrix]
+        F & G & H --> I[JSON Payload Generator]
+    end
+
+    subgraph Frontend ["3. Interactive UI & Visualizations (app.js)"]
+        I --> J[Reactive State Dispatcher]
+        J --> K[Dataset Topology Metrics Grid]
+        J --> L[Mathematical Summary Tables]
+        J --> M[Automated Diagnostic Insights]
+        J --> N[Plotly.js Visualizers]
+        N --> O[Density Histograms & Outlier Boxplots]
+        N --> P[Correlation Heatmap]
+        N --> Q[OLS Bivariate Regression Lines]
+        N --> R[Categorical Factor Bar Projections]
+    end
+
+    subgraph Export ["4. Export Module"]
+        F --> S[CSV Download of Computed Moments]
+    end
+
+    style Ingestion fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#f8fafc
+    style Backend fill:#0f172a,stroke:#8b5cf6,stroke-width:2px,color:#f8fafc
+    style Frontend fill:#0f172a,stroke:#10b981,stroke-width:2px,color:#f8fafc
+    style Export fill:#0f172a,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+```
+
+---
+
 ## 🚀 Quick Start
 
 ### Option 1: Run with Docker (Recommended)
@@ -175,9 +225,12 @@ StatVision/
 
 ---
 
-## 👤 Author
+<div align="center">
 
-**Ajay Gangwar**  
+### ⭐ Star this repository if you found it helpful
 
-- GitHub: [@ajaygangwar945](https://github.com/ajaygangwar945)  
-- Docker Hub: [ajaygangwar945](https://hub.docker.com/u/ajaygangwar945)
+**Made with ❤️ by [Ajay Gangwar](https://github.com/ajaygangwar945)**
+
+📊 📈 🧮 🔬 🚀
+
+</div>
