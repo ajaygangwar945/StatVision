@@ -52,7 +52,7 @@ Instead of writing repetitive Python scripts or Jupyter notebooks to inspect sum
 
 The project is fully deployed and accessible online.  
 
-[![Live](https://img.shields.io/badge/Live-Visit%20Site-brightgreen?style=for-the-badge)](https://statvision-taak.onrender.com)
+[![Live](https://img.shields.io/badge/Live-Visit%20Site-2563EB?style=for-the-badge&logo=render&logoColor=white)](https://statvision-taak.onrender.com)
 
 ---
 
