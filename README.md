@@ -1,6 +1,8 @@
-<div align="center">
+<p align="center">
+  <img src="static/images/banner.png" width="100%" height="200" style="object-fit: cover" alt="StatVision Banner">
+</p>
 
-<img src="static/images/banner.png" alt="StatVision Banner" width="100%" style="border-radius: 14px; margin-bottom: 1.25rem; box-shadow: 0 8px 30px rgba(0,0,0,0.35);" />
+<div align="center">
 
 # StatVision
 
