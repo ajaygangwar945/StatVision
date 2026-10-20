@@ -1,4 +1,4 @@
-# Python bytecode & cache
+# Python Bytecode & Cache
 __pycache__/
 *.py[cod]
 *.class
@@ -9,23 +9,44 @@ venv/
 .venv/
 env/
 ENV/
+env.bak/
+venv.bak/
 
-# Streamlit secrets (keeps sensitive credentials secure)
-.streamlit/secrets.toml
+# Environment Variables & Secrets
+.env
+.env.*
+*.env
 
-# OS & Environment files
-.DS_Store
-Thumbs.db
-Desktop.ini
+# Flask & Web Server
+instance/
+.webassets-cache/
 
-# IDE & Editor configs
+# Distribution & Build
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE & Editor Configurations
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
-# Temporary & backup files
+# Operating System Files
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# Temporary & Log Files
+*.log
 *.bak
 *.backup
 *.tmp
-*.log

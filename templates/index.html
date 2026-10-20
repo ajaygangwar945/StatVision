@@ -1,0 +1,412 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StatVision</title>
+    <link rel="icon" type="image/png" href="/static/images/logo.png">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- Plotly.js for high-speed client-side visualization -->
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+
+<body>
+    <!-- Hardware-Accelerated 3D Mathematical Background Universe -->
+    <div class="math-3d-universe" aria-hidden="true">
+        <div class="math-grid-plane"></div>
+        <div class="math-gyro-wrap">
+            <div class="math-gyro">
+                <div class="gyro-ring ring-xy"></div>
+                <div class="gyro-ring ring-yz"></div>
+                <div class="gyro-ring ring-xz"></div>
+                <div class="gyro-core">
+                    <div class="poly-face pf-1"></div>
+                    <div class="poly-face pf-2"></div>
+                    <div class="poly-face pf-3"></div>
+                    <div class="poly-face pf-4"></div>
+                    <div class="poly-face pf-5"></div>
+                    <div class="poly-face pf-6"></div>
+                </div>
+            </div>
+        </div>
+        <div class="math-equation eq-1">&int; e<sup>&minus;x&sup2;</sup> dx = &radic;&pi; / 2</div>
+        <div class="math-equation eq-2">&sigma; = &radic;[ &sum;(x &minus; &mu;)&sup2; / N ]</div>
+        <div class="math-equation eq-3">r = Cov(X,Y) / (&sigma;<sub>x</sub> &sigma;<sub>y</sub>)</div>
+        <div class="math-equation eq-4">&beta;<sub>1</sub> = &sum;(x&minus;x̄)(y&minus;ȳ) / &sum;(x&minus;x̄)&sup2;
+        </div>
+        <div class="math-equation eq-5">f(x) = (1/&sigma;&radic;2&pi;) &middot;
+            exp(&minus;(x&minus;&mu;)&sup2;/2&sigma;&sup2;)</div>
+        <div class="math-equation eq-6">&sum; 1/n&sup2; = &pi;&sup2; / 6</div>
+        <div class="math-equation eq-7">e<sup>i&pi;</sup> + 1 = 0</div>
+        <div class="math-equation eq-8">&chi;&sup2; = &sum; (O &minus; E)&sup2; / E</div>
+        <div class="math-equation eq-9">&nabla; &times; B = &mu;<sub>0</sub>J +
+            &mu;<sub>0</sub>&epsilon;<sub>0</sub>(&part;E/&part;t)</div>
+        <div class="math-equation eq-10">lim<sub>n&rarr;&infin;</sub> (1 + 1/n)<sup>n</sup> = e</div>
+        <div class="math-glyph gl-1">&sum;</div>
+        <div class="math-glyph gl-2">&pi;</div>
+        <div class="math-glyph gl-3">&int;</div>
+        <div class="math-glyph gl-4">&infin;</div>
+        <div class="math-glyph gl-5">&Omega;</div>
+        <div class="math-glyph gl-6">&nabla;</div>
+    </div>
+
+    <!-- Main Application Wrapper -->
+    <div class="app-container">
+        <!-- Sidebar Navigation & Controls -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="sidebar-brand-inner">
+                    <img src="/static/images/logo.png" alt="StatVision Logo" class="sidebar-logo">
+                    <span class="sidebar-title">Stat<span>Vision</span></span>
+                </div>
+                <button type="button" class="sidebar-close-btn" id="sidebar-close-btn" aria-label="Close Sidebar"
+                    onclick="toggleMobileSidebar(false)">✕</button>
+            </div>
+
+            <!-- Appearance Mode Switcher -->
+            <div>
+                <div class="sidebar-section-title">Appearance Mode</div>
+                <div class="theme-toggle-group">
+                    <button type="button" class="theme-btn active" id="btn-theme-light" onclick="setTheme('light')">
+                        ☀️ Light
+                    </button>
+                    <button type="button" class="theme-btn" id="btn-theme-dark" onclick="setTheme('dark')">
+                        🌙 Dark
+                    </button>
+                </div>
+            </div>
+
+            <hr class="sidebar-divider">
+
+            <!-- Controls -->
+            <div>
+                <div class="sidebar-section-title">Controls</div>
+                <div class="control-group">
+                    <div class="control-label-row">
+                        <span class="control-label">Chart Height</span>
+                        <span class="control-value" id="val-chart-height">380px</span>
+                    </div>
+                    <input type="range" id="slider-chart-height" min="320" max="600" step="20" value="380"
+                        oninput="updateChartHeight(this.value)">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label-row">
+                        <span class="control-label">Max Categories</span>
+                        <span class="control-value" id="val-max-categories">10</span>
+                    </div>
+                    <input type="range" id="slider-max-categories" min="5" max="20" step="1" value="10"
+                        oninput="updateMaxCategories(this.value)">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label-row">
+                        <span class="control-label">Correlation (|r|)</span>
+                        <span class="control-value" id="val-corr-threshold">0.75</span>
+                    </div>
+                    <input type="range" id="slider-corr-threshold" min="0.5" max="0.95" step="0.05" value="0.75"
+                        oninput="updateCorrThreshold(this.value)">
+                </div>
+            </div>
+
+            <hr class="sidebar-divider">
+
+            <!-- Data Ingestion -->
+            <div>
+                <div class="sidebar-section-title">Data Ingestion</div>
+
+                <!-- File Upload Dropzone -->
+                <div class="file-dropzone" id="file-dropzone" onclick="document.getElementById('file-input').click()">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" />
+                    </svg>
+                    <div class="dropzone-title">Upload CSV Matrix</div>
+                    <div class="dropzone-subtitle">Drag and drop CSV here or browse</div>
+                    <button type="button" class="browse-btn"
+                        onclick="event.stopPropagation(); document.getElementById('file-input').click()">Browse
+                        File</button>
+                    <input type="file" id="file-input" accept=".csv" style="display: none;"
+                        onchange="handleFileUpload(this.files[0])">
+                </div>
+
+                <div style="text-align: center; color: var(--muted-text); font-size: 0.82rem; margin: 0.75rem 0;">
+                    - or load benchmark sample -
+                </div>
+
+                <select id="select-sample" class="select-input" onchange="handleSampleChange(this.value)">
+                    <option value="none">Benchmark Dataset (Select)</option>
+                    <option value="iris">Iris Morphometrics (p=4, N=150)</option>
+                    <option value="tips">Hospitality Economics (p=6, N=244)</option>
+                </select>
+            </div>
+
+            
+            <div class="sidebar-footer">✦ StatVision ✦</div>
+        </aside>
+
+        <!-- Mobile Drawer Backdrop Overlay -->
+        <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleMobileSidebar(false)"></div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Mobile Top App Bar (Visible on Mobile & Tablet) -->
+            <header class="mobile-top-bar">
+                <button type="button" class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open Navigation"
+                    onclick="toggleMobileSidebar(true)">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                        stroke-linecap="round">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="mobile-brand">
+                    <img src="/static/images/logo.png" alt="StatVision Logo" class="mobile-logo">
+                    <span class="mobile-title">Stat<span>Vision</span></span>
+                </div>
+                <button type="button" class="mobile-theme-btn" id="mobile-theme-btn" aria-label="Toggle Theme"
+                    onclick="toggleTheme()">
+                    <span id="mobile-theme-icon">🌙</span>
+                </button>
+            </header>
+
+
+            <!-- Hero Brand Banner -->
+            <div class="hero-container">
+                <div class="hero-brand">
+                    <img src="/static/images/logo.png" class="hero-logo-img" alt="StatVision Logo">
+                    <div class="hero-title">Stat<span>Vision</span></div>
+                </div>
+                <div class="hero-subtitle">
+                    Mathematical Exploratory Data Analysis &amp; Quantitative Intelligence Engine
+                </div>
+                <div class="math-pill-row">
+                    <span class="math-pill">Matrix: N &times; p</span>
+                    <span class="math-pill">Mean: &mu; = E[X]</span>
+                    <span class="math-pill">Std Dev: &sigma;</span>
+                    <span class="math-pill">Pearson: r &isin; [-1, 1]</span>
+                    <span class="math-pill">Quantiles: Q1, Q2, Q3</span>
+                </div>
+            </div>
+
+            <!-- Landing Empty State -->
+            <section id="landing-section" class="landing-wrap">
+                <div class="landing-card-grid">
+                    <div class="metric-card" style="padding: 1.8rem 1rem;">
+                        <div class="landing-step-icon">📊</div>
+                        <div class="landing-step-title">1. Ingest Matrix</div>
+                        <div class="landing-step-desc">Drop any tabular dataset or CSV into the sidebar or choose a
+                            benchmark dataset.</div>
+                    </div>
+                    <div class="metric-card" style="padding: 1.8rem 1rem;">
+                        <div class="landing-step-icon">🧮</div>
+                        <div class="landing-step-title">2. Compute Moments</div>
+                        <div class="landing-step-desc">Automatic computation of Mean &mu;, Variance &sigma;&sup2;, and
+                            Pearson correlation r.</div>
+                    </div>
+                    <div class="metric-card" style="padding: 1.8rem 1rem;">
+                        <div class="landing-step-icon">📈</div>
+                        <div class="landing-step-title">3. Graph &amp; Regress</div>
+                        <div class="landing-step-desc">Explore probability histograms, correlation heatmaps, and OLS
+                            regression lines.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics Content Sections (Hidden until dataset loaded) -->
+            <section id="analytics-section" style="display: none;">
+                <!-- § 1: Dataset Topology & Dimensions -->
+                <div class="section-header">
+                    <span class="section-idx">&sect; 1</span>
+                    <span>Dataset Topology &amp; Dimensions</span>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <span class="metric-sym">N</span>
+                        <div class="metric-val" id="metric-rows">0</div>
+                        <div class="metric-lbl">Observations (Rows)</div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-sym">p</span>
+                        <div class="metric-val" id="metric-cols">0</div>
+                        <div class="metric-lbl">Dimensions (Cols)</div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-sym">&real;</span>
+                        <div class="metric-val" id="metric-num">0</div>
+                        <div class="metric-lbl">Numeric Features</div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-sym">S</span>
+                        <div class="metric-val" id="metric-cat">0</div>
+                        <div class="metric-lbl">Categorical Factors</div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-sym">&empty;</span>
+                        <div class="metric-val" id="metric-nulls">0</div>
+                        <div class="metric-lbl">Missing Values</div>
+                    </div>
+                </div>
+
+                <!-- § 2: Mathematical Summary & Moments -->
+                <div class="section-header">
+                    <span class="section-idx">&sect; 2</span>
+                    <span>Mathematical Summary &amp; Moments</span>
+                </div>
+                <details class="stat-expander">
+                    <summary>View Sample Vectors (First 20 Rows)</summary>
+                    <div class="expander-content">
+                        <div class="table-responsive" id="sample-table-container"></div>
+                    </div>
+                </details>
+
+                <details class="stat-expander" open id="moments-expander">
+                    <summary>Moments &amp; Five-Number Summary Table (&mu;, &sigma;, Q)</summary>
+                    <div class="expander-content">
+                        <div class="table-responsive" id="moments-table-container"></div>
+                    </div>
+                </details>
+
+                <!-- § 3: Statistical Inferences & Diagnostics -->
+                <div class="section-header">
+                    <span class="section-idx">&sect; 3</span>
+                    <span>Statistical Inferences &amp; Diagnostics</span>
+                </div>
+                <div id="insights-container"></div>
+
+                <!-- § 4: Probability Density & Empirical Distribution -->
+                <div id="sec-dist-wrap">
+                    <div class="section-header">
+                        <span class="section-idx">&sect; 4</span>
+                        <span>Probability Density &amp; Empirical Distribution</span>
+                    </div>
+                    <div class="chart-controls-row">
+                        <div>
+                            <label class="control-label" style="display: block; margin-bottom: 0.35rem;">Quantitative
+                                Feature</label>
+                            <select id="select-dist-feature" class="select-input"
+                                onchange="renderDistributionCharts()"></select>
+                        </div>
+                    </div>
+                    <div class="charts-dual-grid">
+                        <div class="chart-card">
+                            <div id="chart-hist"></div>
+                        </div>
+                        <div class="chart-card">
+                            <div id="chart-box"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- § 5: Correlation Matrix Topology -->
+                <div id="sec-corr-wrap">
+                    <div class="section-header">
+                        <span class="section-idx">&sect; 5</span>
+                        <span>Correlation Matrix Topology [ r &isin; [-1, 1] ]</span>
+                    </div>
+                    <div class="chart-card">
+                        <div id="chart-corr"></div>
+                    </div>
+                </div>
+
+                <!-- § 6: Bivariate Geometry & Linear Regression -->
+                <div id="sec-bivariate-wrap">
+                    <div class="section-header">
+                        <span class="section-idx">&sect; 6</span>
+                        <span>Bivariate Geometry &amp; Linear Regression [ ŷ = mx + b ]</span>
+                    </div>
+                    <div class="chart-controls-row">
+                        <div>
+                            <label class="control-label" style="display: block; margin-bottom: 0.35rem;">Predictor
+                                Feature (X)</label>
+                            <select id="select-scatter-x" class="select-input" onchange="renderScatterPlot()"></select>
+                        </div>
+                        <div>
+                            <label class="control-label" style="display: block; margin-bottom: 0.35rem;">Response
+                                Feature (Y)</label>
+                            <select id="select-scatter-y" class="select-input" onchange="renderScatterPlot()"></select>
+                        </div>
+                        <div>
+                            <label class="control-label" style="display: block; margin-bottom: 0.35rem;">Decomposition
+                                (Color)</label>
+                            <select id="select-scatter-color" class="select-input"
+                                onchange="renderScatterPlot()"></select>
+                        </div>
+                        <div style="padding-bottom: 0.4rem;">
+                            <label class="custom-checkbox-wrap">
+                                <input type="checkbox" id="check-scatter-ols" checked onchange="renderScatterPlot()">
+                                <span>Fit OLS Line (y = mx + b)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div id="chart-scatter"></div>
+                        <div id="scatter-trend-callout" class="formula-callout" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- § 7: Categorical Factor Projections -->
+                <div id="sec-cat-wrap">
+                    <div class="section-header">
+                        <span class="section-idx">&sect; 7</span>
+                        <span>Categorical Factor Projections [ E[Y | C = c] ]</span>
+                    </div>
+                    <div class="chart-controls-row">
+                        <div>
+                            <label class="control-label" style="display: block; margin-bottom: 0.35rem;">Factor Group
+                                (C)</label>
+                            <select id="select-bar-group" class="select-input" onchange="renderBarChart()"></select>
+                        </div>
+                        <div>
+                            <label class="control-label" style="display: block; margin-bottom: 0.35rem;">Metric Feature
+                                (Y)</label>
+                            <select id="select-bar-val" class="select-input" onchange="renderBarChart()"></select>
+                        </div>
+                        <div>
+                            <label class="control-label" style="display: block; margin-bottom: 0.35rem;">Aggregation
+                                Operator</label>
+                            <select id="select-bar-agg" class="select-input" onchange="renderBarChart()">
+                                <option value="mean">Mean &mu;</option>
+                                <option value="median">Median Q2</option>
+                                <option value="sum">Sum &sum;</option>
+                                <option value="std">Std Dev &sigma;</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div id="chart-bar"></div>
+                    </div>
+                </div>
+
+                <!-- § 8: Export Quantitative Metrics -->
+                <div class="section-header">
+                    <span class="section-idx">&sect; 8</span>
+                    <span>Export Quantitative Summary Metrics</span>
+                </div>
+                <div style="margin-top: 0.8rem;">
+                    <button type="button" class="btn-primary" onclick="downloadMomentsCSV()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        <span>Download Mathematical Moments (CSV)</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Page Footer -->
+            <footer class="footer-bar">
+                ✦ StatVision ✦
+            </footer>
+        </main>
+    </div>
+
+    <!-- Application Script -->
+    <script src="/static/js/app.js"></script>
+</body>
+
+</html>
