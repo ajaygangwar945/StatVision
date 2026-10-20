@@ -44,7 +44,7 @@ current_theme = st.session_state["theme_mode"]
 # Generate theme-specific CSS variables & Plotly color palettes
 if current_theme == "Dark 🌙":
     active_theme_css = """
-    :root, [data-theme="dark"], [data-theme="light"], html, body, .stApp, [data-testid="stAppViewContainer"], .main {
+    :root, [data-theme="dark"], [data-theme="light"], html, body, .stApp, [data-testid="stAppViewContainer"] {
         --background-color: #0e1117 !important;
         --secondary-background-color: #161b26 !important;
         --text-color: #f8fafc !important;
@@ -55,12 +55,24 @@ if current_theme == "Dark 🌙":
         --pill-bg: rgba(59, 130, 246, 0.16) !important;
         --pill-border: rgba(59, 130, 246, 0.35) !important;
         --shadow-color: rgba(0, 0, 0, 0.45) !important;
+        --math-primary: #38bdf8 !important;
+        --math-secondary: #818cf8 !important;
+        --math-formula: rgba(226, 232, 240, 0.45) !important;
+        --math-glyph: rgba(56, 189, 248, 0.22) !important;
+        --math-grid: rgba(59, 130, 246, 0.15) !important;
+        --math-core-bg: rgba(56, 189, 248, 0.12) !important;
+        --stat-card-glass: rgba(30, 36, 51, 0.88) !important;
+        --stat-card-border: rgba(51, 65, 85, 0.75) !important;
         color-scheme: dark !important;
         background-color: #0e1117 !important;
         color: #f8fafc !important;
     }
-    .stApp, [data-testid="stAppViewContainer"], .main {
+    .stApp, [data-testid="stAppViewContainer"] {
         background-color: #0e1117 !important;
+        color: #f8fafc !important;
+    }
+    .main, [data-testid="stMainBlockContainer"] {
+        background-color: transparent !important;
         color: #f8fafc !important;
     }
     header[data-testid="stHeader"] {
@@ -87,7 +99,7 @@ if current_theme == "Dark 🌙":
     js_theme_attr = "dark"
 elif current_theme == "Light ☀️":
     active_theme_css = """
-    :root, [data-theme="dark"], [data-theme="light"], html, body, .stApp, [data-testid="stAppViewContainer"], .main {
+    :root, [data-theme="dark"], [data-theme="light"], html, body, .stApp, [data-testid="stAppViewContainer"] {
         --background-color: #ffffff !important;
         --secondary-background-color: #f8fafc !important;
         --text-color: #0f172a !important;
@@ -98,12 +110,24 @@ elif current_theme == "Light ☀️":
         --pill-bg: #eff6ff !important;
         --pill-border: #bfdbfe !important;
         --shadow-color: rgba(0, 0, 0, 0.04) !important;
+        --math-primary: #2563eb !important;
+        --math-secondary: #4f46e5 !important;
+        --math-formula: rgba(71, 85, 105, 0.42) !important;
+        --math-glyph: rgba(37, 99, 235, 0.18) !important;
+        --math-grid: rgba(37, 99, 235, 0.08) !important;
+        --math-core-bg: rgba(37, 99, 235, 0.06) !important;
+        --stat-card-glass: rgba(255, 255, 255, 0.92) !important;
+        --stat-card-border: rgba(226, 232, 240, 0.85) !important;
         color-scheme: light !important;
         background-color: #ffffff !important;
         color: #0f172a !important;
     }
-    .stApp, [data-testid="stAppViewContainer"], .main {
+    .stApp, [data-testid="stAppViewContainer"] {
         background-color: #ffffff !important;
+        color: #0f172a !important;
+    }
+    .main, [data-testid="stMainBlockContainer"] {
+        background-color: transparent !important;
         color: #0f172a !important;
     }
     header[data-testid="stHeader"] {
@@ -141,10 +165,21 @@ else:  # System ⚙️
         --pill-bg: #eff6ff;
         --pill-border: #bfdbfe;
         --shadow-color: rgba(0, 0, 0, 0.04);
+        --math-primary: #2563eb;
+        --math-secondary: #4f46e5;
+        --math-formula: rgba(71, 85, 105, 0.42);
+        --math-glyph: rgba(37, 99, 235, 0.18);
+        --math-grid: rgba(37, 99, 235, 0.08);
+        --math-core-bg: rgba(37, 99, 235, 0.06);
+        --stat-card-glass: rgba(255, 255, 255, 0.92);
+        --stat-card-border: rgba(226, 232, 240, 0.85);
         color-scheme: light;
     }
+    .main, [data-testid="stMainBlockContainer"] {
+        background-color: transparent !important;
+    }
     @media (prefers-color-scheme: dark) {
-        :root, html, body, .stApp, [data-testid="stAppViewContainer"], .main {
+        :root, html, body, .stApp, [data-testid="stAppViewContainer"] {
             --background-color: #0e1117 !important;
             --secondary-background-color: #161b26 !important;
             --text-color: #f8fafc !important;
@@ -155,12 +190,24 @@ else:  # System ⚙️
             --pill-bg: rgba(59, 130, 246, 0.16) !important;
             --pill-border: rgba(59, 130, 246, 0.35) !important;
             --shadow-color: rgba(0, 0, 0, 0.45) !important;
+            --math-primary: #38bdf8 !important;
+            --math-secondary: #818cf8 !important;
+            --math-formula: rgba(226, 232, 240, 0.45) !important;
+            --math-glyph: rgba(56, 189, 248, 0.22) !important;
+            --math-grid: rgba(59, 130, 246, 0.15) !important;
+            --math-core-bg: rgba(56, 189, 248, 0.12) !important;
+            --stat-card-glass: rgba(30, 36, 51, 0.88) !important;
+            --stat-card-border: rgba(51, 65, 85, 0.75) !important;
             color-scheme: dark !important;
             background-color: #161b26 !important;
             color: #f8fafc !important;
         }
-        .stApp, [data-testid="stAppViewContainer"], .main {
+        .stApp, [data-testid="stAppViewContainer"] {
             background-color: #161b26 !important;
+            color: #f8fafc !important;
+        }
+        .main, [data-testid="stMainBlockContainer"] {
+            background-color: transparent !important;
             color: #f8fafc !important;
         }
         header[data-testid="stHeader"] {
@@ -211,6 +258,183 @@ st.markdown(f"<style>{active_theme_css}</style>", unsafe_allow_html=True)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+    /* =========================================================================
+       Hardware-Accelerated 3D Mathematical Background Universe
+       ========================================================================= */
+    .math-3d-universe {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        pointer-events: none !important;
+        z-index: 0 !important;
+        overflow: hidden !important;
+        perspective: 1200px !important;
+        perspective-origin: 50% 45% !important;
+        transform-style: preserve-3d !important;
+    }
+
+    /* Infinite Perspective Coordinate Grid Plane */
+    .math-grid-plane {
+        position: absolute !important;
+        bottom: -220px !important;
+        left: -50% !important;
+        width: 200% !important;
+        height: 950px !important;
+        transform: rotateX(72deg) translateZ(-40px) !important;
+        transform-origin: center bottom !important;
+        background-image: 
+            linear-gradient(to right, var(--math-grid) 1.5px, transparent 1.5px),
+            linear-gradient(to bottom, var(--math-grid) 1.5px, transparent 1.5px) !important;
+        background-size: 70px 70px !important;
+        mask-image: radial-gradient(ellipse at 50% 90%, black 25%, transparent 75%) !important;
+        -webkit-mask-image: radial-gradient(ellipse at 50% 90%, black 25%, transparent 75%) !important;
+        animation: gridDrift3D 20s linear infinite !important;
+    }
+    @keyframes gridDrift3D {
+        0% { background-position: 0 0; }
+        100% { background-position: 0 700px; }
+    }
+
+    /* 3D Rotating Coordinate Gyroscope */
+    .math-gyro-wrap {
+        position: absolute !important;
+        top: 7% !important;
+        right: 5% !important;
+        width: 280px !important;
+        height: 280px !important;
+        perspective: 1000px !important;
+        transform-style: preserve-3d !important;
+    }
+    .math-gyro {
+        width: 100% !important;
+        height: 100% !important;
+        position: relative !important;
+        transform-style: preserve-3d !important;
+        animation: spinGyro 34s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate !important;
+    }
+    @keyframes spinGyro {
+        0% { transform: rotateX(15deg) rotateY(0deg) rotateZ(10deg); }
+        50% { transform: rotateX(55deg) rotateY(180deg) rotateZ(45deg); }
+        100% { transform: rotateX(15deg) rotateY(360deg) rotateZ(10deg); }
+    }
+    .gyro-ring {
+        position: absolute !important;
+        inset: 0 !important;
+        border-radius: 50% !important;
+        border: 1.5px dashed var(--math-primary) !important;
+        opacity: 0.35 !important;
+        box-shadow: 0 0 15px var(--math-grid) !important;
+        transform-style: preserve-3d !important;
+    }
+    .ring-xy { transform: rotateZ(0deg) !important; border-style: solid !important; }
+    .ring-yz { transform: rotateY(90deg) !important; border-color: var(--math-secondary) !important; }
+    .ring-xz { transform: rotateX(90deg) !important; }
+
+    /* 3D Floating Octahedron / Cube Diamond Core */
+    .gyro-core {
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        width: 68px !important;
+        height: 68px !important;
+        margin: -34px 0 0 -34px !important;
+        transform-style: preserve-3d !important;
+        animation: spinCore 14s linear infinite !important;
+    }
+    @keyframes spinCore {
+        0% { transform: rotate3d(1, 1, 1, 0deg); }
+        100% { transform: rotate3d(1, 1, 1, 360deg); }
+    }
+    .poly-face {
+        position: absolute !important;
+        width: 100% !important;
+        height: 100% !important;
+        border: 1.5px solid var(--math-primary) !important;
+        background: radial-gradient(circle, var(--math-core-bg) 0%, transparent 70%) !important;
+        opacity: 0.55 !important;
+    }
+    .pf-1 { transform: rotateY(0deg) translateZ(34px) !important; }
+    .pf-2 { transform: rotateY(90deg) translateZ(34px) !important; }
+    .pf-3 { transform: rotateY(180deg) translateZ(34px) !important; }
+    .pf-4 { transform: rotateY(270deg) translateZ(34px) !important; }
+    .pf-5 { transform: rotateX(90deg) translateZ(34px) !important; }
+    .pf-6 { transform: rotateX(-90deg) translateZ(34px) !important; }
+
+    /* Floating Mathematical Formulas & Equations in 3D Space */
+    .math-equation {
+        position: absolute !important;
+        font-family: 'Fira Code', monospace !important;
+        font-size: 0.88rem !important;
+        font-weight: 500 !important;
+        color: var(--math-formula) !important;
+        letter-spacing: 0.05em !important;
+        white-space: nowrap !important;
+        text-shadow: 0 0 10px var(--math-grid) !important;
+        transform-style: preserve-3d !important;
+        animation-timing-function: ease-in-out !important;
+        animation-iteration-count: infinite !important;
+        animation-direction: alternate !important;
+        user-select: none !important;
+    }
+    .math-glyph {
+        position: absolute !important;
+        font-family: 'Space Grotesk', serif !important;
+        font-size: 3.2rem !important;
+        font-weight: 300 !important;
+        color: var(--math-glyph) !important;
+        transform-style: preserve-3d !important;
+        animation-timing-function: ease-in-out !important;
+        animation-iteration-count: infinite !important;
+        animation-direction: alternate !important;
+        user-select: none !important;
+    }
+
+    /* Individual 3D Coordinates & Drifts */
+    .eq-1 { top: 12%; left: 8%; animation: float3D_1 18s; }
+    .eq-2 { top: 28%; left: 2%; animation: float3D_2 22s; }
+    .eq-3 { top: 48%; left: 9%; animation: float3D_3 26s; }
+    .eq-4 { top: 68%; left: 3%; animation: float3D_1 20s; }
+    .eq-5 { top: 84%; left: 12%; animation: float3D_2 24s; }
+
+    .eq-6 { top: 16%; right: 28%; animation: float3D_3 21s; }
+    .eq-7 { top: 38%; right: 10%; animation: float3D_1 25s; }
+    .eq-8 { top: 58%; right: 6%; animation: float3D_2 19s; }
+    .eq-9 { top: 76%; right: 20%; animation: float3D_3 23s; }
+    .eq-10 { top: 88%; right: 5%; animation: float3D_1 27s; }
+
+    .gl-1 { top: 8%; left: 42%; animation: floatGlyph1 24s; }
+    .gl-2 { top: 32%; left: 36%; animation: floatGlyph2 28s; }
+    .gl-3 { top: 62%; left: 44%; animation: floatGlyph1 30s; }
+    .gl-4 { top: 78%; left: 32%; animation: floatGlyph2 22s; }
+    .gl-5 { top: 22%; right: 4%; animation: floatGlyph1 25s; }
+    .gl-6 { top: 72%; right: 12%; animation: floatGlyph2 29s; }
+
+    @keyframes float3D_1 {
+        0% { transform: translate3d(0, 0, -80px) rotateX(10deg) rotateY(-8deg); }
+        50% { transform: translate3d(15px, -25px, 60px) rotateX(-5deg) rotateY(12deg); }
+        100% { transform: translate3d(-10px, 15px, -20px) rotateX(8deg) rotateY(-5deg); }
+    }
+    @keyframes float3D_2 {
+        0% { transform: translate3d(0, 0, 40px) rotateX(-8deg) rotateY(14deg); }
+        50% { transform: translate3d(-20px, 30px, -70px) rotateX(12deg) rotateY(-6deg); }
+        100% { transform: translate3d(12px, -15px, 20px) rotateX(-4deg) rotateY(8deg); }
+    }
+    @keyframes float3D_3 {
+        0% { transform: translate3d(0, 0, -30px) rotateZ(-4deg) rotateX(6deg); }
+        50% { transform: translate3d(25px, -35px, 80px) rotateZ(6deg) rotateX(-10deg); }
+        100% { transform: translate3d(-15px, 20px, -50px) rotateZ(-2deg) rotateX(4deg); }
+    }
+    @keyframes floatGlyph1 {
+        0% { transform: translate3d(0, 0, -120px) rotateZ(0deg) scale(0.9); }
+        100% { transform: translate3d(30px, -40px, 80px) rotateZ(35deg) scale(1.15); }
+    }
+    @keyframes floatGlyph2 {
+        0% { transform: translate3d(0, 0, 50px) rotateZ(10deg) scale(1.1); }
+        100% { transform: translate3d(-35px, 35px, -90px) rotateZ(-25deg) scale(0.85); }
+    }
 
     /* =========================================================================
        Appearance Mode Segmented Control (Sidebar: Full Width Light & Dark)
@@ -591,15 +815,19 @@ st.markdown("""
 
     /* Accordion Expanders */
     div[data-testid="stExpander"] {
-        background-color: var(--card-bg) !important;
-        border: 1px solid var(--card-border) !important;
+        background: var(--stat-card-glass) !important;
+        backdrop-filter: blur(14px) !important;
+        -webkit-backdrop-filter: blur(14px) !important;
+        border: 1px solid var(--stat-card-border) !important;
         border-radius: 8px !important;
-        box-shadow: 0 1px 3px var(--shadow-color) !important;
+        box-shadow: 0 2px 10px var(--shadow-color) !important;
+        position: relative !important;
+        z-index: 2 !important;
     }
     div[data-testid="stExpander"] details summary {
         color: var(--text-color) !important;
         font-weight: 600 !important;
-        background-color: var(--card-bg) !important;
+        background-color: transparent !important;
     }
     div[data-testid="stExpander"] details summary svg {
         fill: var(--text-color) !important;
@@ -718,10 +946,14 @@ st.markdown("""
         text-align: center;
         padding: 1.6rem 1.2rem 1.7rem 1.2rem;
         margin-bottom: 1.5rem;
-        border: 1px solid var(--card-border);
-        background: var(--card-bg);
+        border: 1px solid var(--stat-card-border);
+        background: var(--stat-card-glass);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
         border-radius: 16px;
-        box-shadow: 0 1px 4px var(--shadow-color);
+        box-shadow: 0 4px 20px var(--shadow-color);
+        position: relative;
+        z-index: 2;
     }
     .hero-brand {
         display: inline-flex;
@@ -782,14 +1014,18 @@ st.markdown("""
         color: var(--text-color);
         margin: 2.2rem 0 1rem 0;
         padding: 0.45rem 0.85rem;
-        background: var(--card-bg);
-        border: 1px solid var(--card-border);
+        background: var(--stat-card-glass);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid var(--stat-card-border);
         border-left: 4px solid var(--primary-color);
         border-radius: 6px;
-        box-shadow: 0 1px 3px var(--shadow-color);
+        box-shadow: 0 2px 8px var(--shadow-color);
         display: flex;
         align-items: center;
         gap: 0.6rem;
+        position: relative;
+        z-index: 2;
     }
     .section-idx {
         font-family: 'Fira Code', monospace;
@@ -804,13 +1040,16 @@ st.markdown("""
 
     /* Metric Cards */
     .metric-card {
-        background-color: var(--card-bg);
-        border: 1px solid var(--card-border);
+        background: var(--stat-card-glass);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid var(--stat-card-border);
         border-radius: 10px;
         padding: 1.2rem 1rem;
         text-align: center;
         position: relative;
-        box-shadow: 0 1px 3px var(--shadow-color);
+        z-index: 2;
+        box-shadow: 0 2px 10px var(--shadow-color);
         transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
     }
     .metric-card:hover {
@@ -843,8 +1082,10 @@ st.markdown("""
 
     /* Insight Alert Boxes */
     .insight-card {
-        background-color: var(--card-bg);
-        border: 1px solid var(--card-border);
+        background: var(--stat-card-glass);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid var(--stat-card-border);
         border-left: 4px solid var(--primary-color);
         border-radius: 8px;
         padding: 0.85rem 1rem;
@@ -854,7 +1095,9 @@ st.markdown("""
         display: flex;
         align-items: center;
         gap: 0.8rem;
-        box-shadow: 0 1px 2px var(--shadow-color);
+        box-shadow: 0 2px 8px var(--shadow-color);
+        position: relative;
+        z-index: 2;
     }
     .insight-pill {
         font-family: 'Fira Code', monospace;
@@ -904,7 +1147,9 @@ st.markdown("""
 
     /* Math Formula Callout */
     .formula-callout {
-        background-color: var(--card-bg);
+        background: var(--stat-card-glass);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
         border: 1px solid var(--pill-border);
         border-left: 4px solid var(--primary-color);
         border-radius: 6px;
@@ -914,10 +1159,12 @@ st.markdown("""
         color: var(--primary-color);
         font-size: 0.9rem;
         font-weight: 500;
-        box-shadow: 0 1px 2px var(--shadow-color);
+        box-shadow: 0 2px 8px var(--shadow-color);
         overflow-x: auto;
         white-space: nowrap;
         -webkit-overflow-scrolling: touch;
+        position: relative;
+        z-index: 2;
     }
 
     /* =========================================================================
@@ -1142,6 +1389,20 @@ st.markdown("""
             transform: scale(0.8) !important;
             transform-origin: top right !important;
         }
+
+        /* 3D Math mobile adjustments */
+        .math-gyro-wrap {
+            transform: scale(0.62) !important;
+            transform-origin: top right !important;
+            top: 2% !important;
+            right: 0 !important;
+        }
+        .eq-2, .eq-5, .eq-7, .eq-9 {
+            display: none !important;
+        }
+        .math-equation {
+            font-size: 0.74rem !important;
+        }
     }
 
     /* =========================================================================
@@ -1180,6 +1441,14 @@ st.markdown("""
             font-size: 0.7rem !important;
             padding: 0.18rem 0.5rem !important;
         }
+
+        .math-gyro-wrap {
+            transform: scale(0.48) !important;
+            transform-origin: top right !important;
+        }
+        .eq-3, .eq-8 {
+            display: none !important;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -1195,6 +1464,46 @@ PLOTLY_THEME = dict(
     margin=dict(l=35, r=20, t=45, b=40)
 )
 MATH_PALETTE = ["#2563eb", "#0284c7", "#0d9488", "#7c3aed", "#d97706", "#dc2626"]
+
+# ==============================================================================
+# Hardware-Accelerated 3D Mathematical Background Universe
+# ==============================================================================
+st.markdown("""
+<div class="math-3d-universe" aria-hidden="true">
+    <div class="math-grid-plane"></div>
+    <div class="math-gyro-wrap">
+        <div class="math-gyro">
+            <div class="gyro-ring ring-xy"></div>
+            <div class="gyro-ring ring-yz"></div>
+            <div class="gyro-ring ring-xz"></div>
+            <div class="gyro-core">
+                <div class="poly-face pf-1"></div>
+                <div class="poly-face pf-2"></div>
+                <div class="poly-face pf-3"></div>
+                <div class="poly-face pf-4"></div>
+                <div class="poly-face pf-5"></div>
+                <div class="poly-face pf-6"></div>
+            </div>
+        </div>
+    </div>
+    <div class="math-equation eq-1">&int; e<sup>&minus;x&sup2;</sup> dx = &radic;&pi; / 2</div>
+    <div class="math-equation eq-2">&sigma; = &radic;[ &sum;(x &minus; &mu;)&sup2; / N ]</div>
+    <div class="math-equation eq-3">r = Cov(X,Y) / (&sigma;<sub>x</sub> &sigma;<sub>y</sub>)</div>
+    <div class="math-equation eq-4">&beta;<sub>1</sub> = &sum;(x&minus;x̄)(y&minus;ȳ) / &sum;(x&minus;x̄)&sup2;</div>
+    <div class="math-equation eq-5">f(x) = (1/&sigma;&radic;2&pi;) &middot; exp(&minus;(x&minus;&mu;)&sup2;/2&sigma;&sup2;)</div>
+    <div class="math-equation eq-6">&sum; 1/n&sup2; = &pi;&sup2; / 6</div>
+    <div class="math-equation eq-7">e<sup>i&pi;</sup> + 1 = 0</div>
+    <div class="math-equation eq-8">&chi;&sup2; = &sum; (O &minus; E)&sup2; / E</div>
+    <div class="math-equation eq-9">&nabla; &times; B = &mu;<sub>0</sub>J + &mu;<sub>0</sub>&epsilon;<sub>0</sub>(&part;E/&part;t)</div>
+    <div class="math-equation eq-10">lim<sub>n&rarr;&infin;</sub> (1 + 1/n)<sup>n</sup> = e</div>
+    <div class="math-glyph gl-1">&sum;</div>
+    <div class="math-glyph gl-2">&pi;</div>
+    <div class="math-glyph gl-3">&int;</div>
+    <div class="math-glyph gl-4">&infin;</div>
+    <div class="math-glyph gl-5">&Omega;</div>
+    <div class="math-glyph gl-6">&nabla;</div>
+</div>
+""", unsafe_allow_html=True)
 
 # ==============================================================================
 # Header with Safe Base64 SVG Logo
