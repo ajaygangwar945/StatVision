@@ -4,9 +4,7 @@
 
 <div align="center">
 
-# StatVision
-
-### Mathematical Exploratory Data Analysis & Quantitative Intelligence Engine
+# 📚 StatVision 📈
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://statvision-taak.onrender.com)
 [![Python Version](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
@@ -14,7 +12,7 @@
 [![Plotly](https://img.shields.io/badge/Plotly.js-2.35-3F4F75?style=for-the-badge&logo=plotly&logoColor=white)](https://plotly.com/javascript/)
 [![Docker Hub](https://img.shields.io/badge/Docker_Hub-ajaygangwar945-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com/r/ajaygangwar945/statvision)
 
-**🌐 Live Demo:** [https://statvision-taak.onrender.com](https://statvision-taak.onrender.com)
+### 🌐 **[Live Demo](https://statvision-taak.onrender.com)** 🌐
 
 *StatVision transforms raw tabular datasets and CSV matrices into instant, interactive mathematical insights, distribution densities, and regression diagnostics with zero lag.*
 
@@ -22,20 +20,31 @@
 
 ---
 
-## ⚡ Highlights
+## 📖 About The Project
 
-- **Blazing Fast Architecture**: Pure Python (Flask) backend with C-accelerated NumPy & Pandas calculations, paired with native GPU-accelerated client-side Plotly.js charts.
-- **Instant Five-Number Summaries & Moments**: Automatic computation of Mean $\mu$, Variance $\sigma^2$, Sample Standard Deviation $\sigma$, Standard Error $SE$, and Quantiles ($Q_1$, Median $Q_2$, $Q_3$).
-- **Automated Statistical Diagnostics**: Real-time skewness detection ($\gamma_1$), missing entry mapping, and collinearity alerts based on dynamic Pearson correlation thresholds ($r \in [-1, 1]$).
-- **Interactive Visualizations**:
-  - Probability Density & Empirical Histogram with dynamic $\mu$ and $Q_2$ guide overlays.
-  - Quantile Outlier Boxplots with jittered observation points.
-  - Cross-Collinearity Correlation Heatmaps.
-  - Bivariate Regression Scatter Plots with on-the-fly Ordinary Least Squares (OLS) trendlines ($y = mx + b, R^2$).
-  - Categorical Factor Projections with configurable aggregations.
-- **Glassmorphic Mathematical UI**: Beautiful 3D gyroscope core animation, floating mathematical equation atmosphere, and seamless Light/Dark mode toggling.
-- **100% Mobile Responsive**: Fixed desktop sidebar with off-canvas drawer navigation for phones and tablets.
-- **Production-Hardened**: Built-in XSS sanitization, 32MB payload caps, file extension whitelisting, and defensive HTTP security headers (`nosniff`, `SAMEORIGIN`, `strict-origin`).
+**StatVision** is a web-based Exploratory Data Analysis (EDA) and Quantitative Intelligence tool designed to help students, researchers, and data professionals understand their datasets immediately. 
+
+Instead of writing repetitive Python scripts or Jupyter notebooks to inspect summary statistics and plot charts, you can simply upload any CSV dataset or choose a benchmark sample. StatVision instantly breaks down the data topology, calculates mathematical moments, identifies data quality issues, and renders interactive statistical charts in real time.
+
+---
+
+## ✨ Features
+
+- **📂 Easy Data Ingestion**: Drag and drop any CSV or tabular file, or select pre-loaded benchmark datasets to get started right away.
+- **📐 Dataset Topology**: Instant overview of total rows (N), feature dimensions (p), numerical columns, categorical factors, and missing entry counts.
+- **🧮 Mathematical Moments & 5-Number Summary**: Automatic calculation of Mean, Variance, Standard Deviation, Standard Error, and quantiles ($x_{\text{min}}, Q_1, \text{Median } Q_2, Q_3, x_{\text{max}}$).
+- **🔍 Automated Statistical Diagnostics**:
+  - **Missing Values**: Highlights incomplete columns and null counts.
+  - **Skewness Detection**: Flags left/right skewed distributions and recommends transformations.
+  - **Pearson Correlation**: Automatically identifies strong positive and negative linear dependencies based on your adjustable correlation threshold slider.
+- **📊 Interactive Visualizations**:
+  - **Distribution Histograms**: Probability density charts with dynamic Mean and Median guideline overlays.
+  - **Quantile Boxplots**: Identify outliers and spread with jittered observation points.
+  - **Correlation Heatmap**: Visual matrix of pairwise feature correlations.
+  - **Bivariate Regression Scatter Plots**: Interactive scatter plots with on-the-fly Ordinary Least Squares (OLS) trendlines, Pearson $r$, and $R^2$ values.
+  - **Categorical Projections**: Bar charts with customizable aggregations (Mean, Median, Sum, Standard Deviation) and category limits.
+- **📥 Export Summary Metrics**: Download the calculated mathematical moments and quantile summary table as a CSV with a single click.
+- **🌓 Theme & Responsive Design**: Seamless switching between Light and Dark modes with an animated mathematical background, fully responsive for desktop, tablet, and mobile.
 
 ---
 
@@ -103,6 +112,7 @@ Open your browser and navigate to: **`http://localhost:5000`**
 ## ☁️ Deployment
 
 ### Live Application on Render
+
 StatVision is deployed and running live at:
 🔗 **[https://statvision-taak.onrender.com](https://statvision-taak.onrender.com)**
 
