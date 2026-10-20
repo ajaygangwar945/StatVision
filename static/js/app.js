@@ -7,6 +7,16 @@ let chartHeight = 380;
 let maxCategories = 10;
 let corrThreshold = 0.75;
 
+function escapeHtml(str) {
+    if (str === null || str === undefined) return "";
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 const MATH_PALETTE = ["#2563eb", "#0284c7", "#0d9488", "#7c3aed", "#d97706", "#dc2626"];
 
 // =========================================================================
@@ -210,7 +220,7 @@ function renderSampleTable(records, columns) {
 
     let html = '<table class="stat-table"><thead><tr>';
     columns.forEach(col => {
-        html += `<th>${col}</th>`;
+        html += `<th>${escapeHtml(col)}</th>`;
     });
     html += '</tr></thead><tbody>';
 
@@ -218,7 +228,7 @@ function renderSampleTable(records, columns) {
         html += '<tr>';
         columns.forEach(col => {
             const val = row[col] !== undefined && row[col] !== null ? row[col] : '-';
-            html += `<td>${val}</td>`;
+            html += `<td>${escapeHtml(val)}</td>`;
         });
         html += '</tr>';
     });
@@ -256,7 +266,7 @@ function renderMomentsTable(moments) {
     moments.forEach(m => {
         html += `
         <tr>
-            <td style="font-weight: 600; color: var(--primary-color);">${m.feature}</td>
+            <td style="font-weight: 600; color: var(--primary-color);">${escapeHtml(m.feature)}</td>
             <td>${m.count.toLocaleString()}</td>
             <td>${m.mean}</td>
             <td>${m.std}</td>
